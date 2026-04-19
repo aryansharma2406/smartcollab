@@ -1,26 +1,27 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../middleware/authMiddleware");
-const { getTasksGrouped } = require("../controllers/taskController");
 
-router.get("/grouped/:projectId", auth, getTasksGrouped);
 const {
   createTask,
   getTasks,
   updateTask,
-  deleteTask
+  deleteTask,
+  getTasksGrouped
 } = require("../controllers/taskController");
 
+// Get grouped tasks
+router.get("/grouped/:projectId", getTasksGrouped);
+
 // Create task
-router.post("/", auth, createTask);
+router.post("/", createTask);
 
 // Get tasks by project
-router.get("/:projectId", auth, getTasks);
+router.get("/:projectId", getTasks);
 
-// 🔥 NEW: Update task
-router.put("/:id", auth, updateTask);
+// Update task
+router.put("/:id", updateTask);
 
-// 🔥 NEW: Delete task
-router.delete("/:id", auth, deleteTask);
+// Delete task
+router.delete("/:id", deleteTask);
 
 module.exports = router;
