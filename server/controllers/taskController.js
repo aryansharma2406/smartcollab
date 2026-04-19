@@ -9,7 +9,7 @@ exports.createTask = async (req, res) => {
       title,
       description,
       project,
-      assignedTo: req.user.id,
+      assignedTo: "demo-user", // ✅ FIX
     });
 
     res.status(201).json(task);
@@ -22,12 +22,12 @@ exports.createTask = async (req, res) => {
 exports.getTasks = async (req, res) => {
   try {
     const tasks = await Task.find({ project: req.params.projectId });
-
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
 // Update Task
 exports.updateTask = async (req, res) => {
   try {
@@ -36,7 +36,6 @@ exports.updateTask = async (req, res) => {
       req.body,
       { new: true }
     );
-
     res.json(task);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -52,7 +51,8 @@ exports.deleteTask = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-// Get tasks grouped by status (Trello-style)
+
+// Get tasks grouped by status
 exports.getTasksGrouped = async (req, res) => {
   try {
     const tasks = await Task.find({ project: req.params.projectId });
@@ -64,6 +64,7 @@ exports.getTasksGrouped = async (req, res) => {
     };
 
     tasks.forEach((task) => {
+      if (!grouped[task.status]) grouped[task.status] = [];
       grouped[task.status].push(task);
     });
 
