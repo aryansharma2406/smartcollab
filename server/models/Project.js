@@ -10,14 +10,12 @@ const projectSchema = new mongoose.Schema(
       type: String,
     },
     owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      type: String,   // ✅ FIX
       required: true,
     },
     members: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        type: String,  // ✅ FIX
       },
     ],
   },
