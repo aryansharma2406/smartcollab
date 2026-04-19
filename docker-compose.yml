@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./server
+    container_name: smartcollab-backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/.env
+    restart: always
+
+  frontend:
+    build: ./client
+    container_name: smartcollab-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: always
