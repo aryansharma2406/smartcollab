@@ -18,6 +18,9 @@ const projectSchema = new mongoose.Schema(
         type: String,  // ✅ FIX
       },
     ],
+    deadline: {
+  type: Date,
+},
   },
   { timestamps: true }
 );

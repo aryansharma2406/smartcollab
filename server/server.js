@@ -15,11 +15,12 @@ mongoose.connect(process.env.MONGO_URI)
 
 const PORT = process.env.PORT || 5000;
 const authRoutes = require("./routes/authRoutes");
-
+const messageRoutes = require("./routes/messageRoutes");
 const projectRoutes = require("./routes/projectRoutes");
 
 app.use("/api/projects", projectRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/messages", messageRoutes);
 
 const taskRoutes = require("./routes/taskRoutes");
 

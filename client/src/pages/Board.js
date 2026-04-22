@@ -9,6 +9,8 @@ const Board = ({ projectId }) => {
     done: [],
   });
 
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
   const [newTask, setNewTask] = useState("");
 
   // Fetch tasks
@@ -17,6 +19,27 @@ const Board = ({ projectId }) => {
       .then((res) => setTasks(res.data))
       .catch((err) => console.log(err));
   }, [projectId]);
+  useEffect(() => {
+  API.get(`/messages/${projectId}`)
+    .then((res) => setMessages(res.data))
+    .catch((err) => console.log(err));
+}, [projectId]);
+  const handleSendMessage = async () => {
+  if (!newMessage) return;
+
+  try {
+    const res = await API.post("/messages", {
+      text: newMessage,
+      project: projectId,
+      sender: localStorage.getItem("username") || "Anonymous",
+    });
+
+    setMessages((prev) => [...prev, res.data]);
+    setNewMessage("");
+  } catch (err) {
+    console.log(err);
+  }
+};
 
   // Drag & Drop
   const onDragEnd = async (result) => {
@@ -115,7 +138,40 @@ const Board = ({ projectId }) => {
                       placeholder="Add new task..."
                     />
                     <button onClick={handleAddTask}>Add</button>
+                    <div style={{ marginTop: "30px" }}>
+  <h3>💬 Team Chat</h3>
+
+  {/* Messages */}
+  <div
+    style={{
+      maxHeight: "200px",
+      overflowY: "auto",
+      border: "1px solid #ccc",
+      padding: "10px",
+      marginBottom: "10px",
+      background: "#f5f5f5",
+    }}
+  >
+    {messages.map((msg) => (
+      <div key={msg._id} style={{ marginBottom: "8px" }}>
+        <strong>{msg.sender}:</strong> {msg.text}
+      </div>
+    ))}
+  </div>
+
+  {/* Input */}
+  <div style={{ display: "flex", gap: "10px" }}>
+    <input
+      value={newMessage}
+      onChange={(e) => setNewMessage(e.target.value)}
+      placeholder="Type message..."
+      style={{ flex: 1 }}
+    />
+    <button onClick={handleSendMessage}>Send</button>
+  </div>
+</div>
                   </div>
+                  
                 )}
 
                 {tasks[status].map((task, index) => (
