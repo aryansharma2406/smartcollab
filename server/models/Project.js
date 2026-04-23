@@ -10,17 +10,25 @@ const projectSchema = new mongoose.Schema(
       type: String,
     },
     owner: {
-      type: String,   // ✅ FIX
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,   // ✅ FIX
+      ref: "User",
     },
-    members: [
-      {
-        type: String,  // ✅ FIX
-      },
-    ],
     deadline: {
   type: Date,
 },
+    members: [
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    role: {
+      type: String,
+      default: "member",
+    },
+    
+  },
+],
   },
   { timestamps: true }
 );
